@@ -1,96 +1,99 @@
-//counter to 9999 (by clicking button, you add 1)
+// licznik do 9999
+// counter to 9999, click button to add 1, hold to add more
 
-#define SEG_A 0
-#define SEG_B 1
-#define SEG_C 2
-#define SEG_D 3
-#define SEG_E 4
-#define SEG_F 5
-#define SEG_G 6
-#define SEG_dp 7
-
-#define dodaj 20
-#define cyf1 19
-#define cyf2 18
-#define cyf3 17
-#define cyf4 16
+#define segA 0
+#define segB 1 
+#define segC 2
+#define segD 3
+#define segE 4
+#define segF 5
+#define segG 6
+#define segdp 7
 
 
-int i = 0;
+#define cyfra1 3
+#define cyfra2 2
+#define cyfra3 1
+#define cyfra4 0
+#define button 8
+int i=0;
+int licznik=1;
 int tab[10];
-int jednosci;
-int dziesiatki;
-int setki;
-int tysiace;
+  int jednosci,setek,dzies,tys;
+void setup() {
 
-void setup(){
- Serial.begin(9600);
- pinMode(SEG_A, OUTPUT);
- pinMode(SEG_B, OUTPUT);
- pinMode(SEG_C, OUTPUT);
- pinMode(SEG_D, OUTPUT);
- pinMode(SEG_E, OUTPUT);
- pinMode(SEG_F, OUTPUT);
- pinMode(SEG_G, OUTPUT);
- pinMode(SEG_dp, OUTPUT);
- 
- pinMode(dodaj, INPUT_PULLUP);
- pinMode(cyf1, OUTPUT);
- pinMode(cyf2, OUTPUT);
- pinMode(cyf3, OUTPUT);
- pinMode(cyf4, OUTPUT);
- 
- digitalWrite(cyf1,LOW);
- tab[0]=255-(1<<SEG_A)-(1<<SEG_B)-(1<<SEG_C)-(1<<SEG_D)-(1<<SEG_E)- (1<<SEG_F);
- tab[1]=255-(1<<SEG_B)-(1<<SEG_C);
- tab[2]=255-(1<<SEG_A)-(1<<SEG_B)-(1<<SEG_G)-(1<<SEG_E)-(1<<SEG_D);
- tab[3]=255-(1<<SEG_A)-(1<<SEG_B)-(1<<SEG_C)-(1<<SEG_D)-(1<<SEG_G);
- tab[4]=255-(1<<SEG_B)-(1<<SEG_C)-(1<<SEG_F)-(1<<SEG_G);
- tab[5]=255-(1<<SEG_A)-(1<<SEG_F)-(1<<SEG_C)-(1<<SEG_D)-(1<<SEG_G);
- tab[6]=255-(1<<SEG_A)-(1<<SEG_F)-(1<<SEG_C)-(1<<SEG_D)-(1<<SEG_E)-(1<<SEG_G);
- tab[7]=255-(1<<SEG_B)-(1<<SEG_C)-(1<<SEG_A);
- tab[8]=255-(1<<SEG_A)-(1<<SEG_B)-(1<<SEG_C)-(1<<SEG_D)-(1<<SEG_E)- (1<<SEG_F)-(1<<SEG_G);
- tab[9]=255-(1<<SEG_A)-(1<<SEG_B)-(1<<SEG_C)-(1<<SEG_D)- (1<<SEG_F)-(1<<SEG_G);
-   
-    digitalWrite(cyf1,HIGH);
-    digitalWrite(cyf2,HIGH);
-    digitalWrite(cyf3,HIGH);
-    digitalWrite(cyf4,HIGH);
+  pinMode(0, OUTPUT);
+  pinMode(1, OUTPUT);
+  pinMode(2, OUTPUT);
+  pinMode(3, OUTPUT); 
+  DDRC=255;
+
+  // odpowiedzialne za przycisk
+  pinMode(8, INPUT_PULLUP);
+  tab[0]=255-(1<<segA)-(1<<segB)-(1<<segC)-(1<<segD)-(1<<segE)-(1<<segF);
+  tab[1]=255-(1<<segC)-(1<<segB);
+  tab[2]=255-(1<<segA)-(1<<segB)-(1<<segD)-(1<<segG)-(1<<segE);
+  tab[3]=255-(1<<segA)-(1<<segB)-(1<<segC)-(1<<segD)-(1<<segG);
+  tab[4]=255-(1<<segF)-(1<<segB)-(1<<segC)-(1<<segG);
+  tab[5]=255-(1<<segA)-(1<<segC)-(1<<segD)-(1<<segG)-(1<<segF);
+  tab[6]=255-(1<<segA)-(1<<segC)-(1<<segD)-(1<<segG)-(1<<segF)-(1<<segE);
+  tab[7]=255-(1<<segC)-(1<<segB)-(1<<segA);
+  tab[8]=255-(1<<segA)-(1<<segB)-(1<<segC)-(1<<segD)-(1<<segE)-(1<<segF)-(1<<segG);
+  tab[9]=255-(1<<segA)-(1<<segC)-(1<<segD)-(1<<segG)-(1<<segF)-(1<<segB);
+
+  digitalWrite(cyfra1,HIGH);
+  digitalWrite(cyfra2,HIGH);
+  digitalWrite(cyfra3,HIGH);
+  digitalWrite(cyfra4,HIGH);
+  Serial.begin(9600);
 }
-void loop(){
- 
- 
-  if(digitalRead(dodaj)==LOW){
-    i++;
-   Serial.println(i);
-  delay(200);
-  jednosci = i%10;
-//  i=i/10;
-  dziesiatki = (i/10)%10;
-//  i=i/10;
-  setki = (i/100)%10;
-//  i=i/10;
-  tysiace = (i/1000)%10;
-  }
- digitalWrite(cyf1,LOW);
- PORTB=tab[jednosci];
- delay(2);
- digitalWrite(cyf1,HIGH);
- 
- digitalWrite(cyf2,LOW);
- PORTB=tab[dziesiatki];
- delay(2);
- digitalWrite(cyf2,HIGH);
- 
-  digitalWrite(cyf3,LOW);
- PORTB=tab[setki];
- delay(2);
- digitalWrite(cyf3,HIGH);
- 
-  digitalWrite(cyf4,LOW);
- PORTB=tab[tysiace];
- delay(2);
- digitalWrite(cyf4,HIGH);
- 
 
- }
+
+void loop() {
+
+  
+  if(digitalRead(button)==LOW){
+    i++;
+    delay(200);  
+    jednosci=i%10;
+    dzies=(i/10)%10;
+    setek=(i/100)%10;
+    tys=(i/1000)%10;
+      Serial.println(i);
+
+  }
+  
+  digitalWrite(cyfra1,LOW);   
+  PORTC = tab[jednosci];
+  delay(2);  
+  digitalWrite(cyfra1,HIGH); 
+  
+ if(i>9){
+  digitalWrite(cyfra2,LOW);   
+  PORTC = tab[dzies];
+  delay(2);  
+  digitalWrite(cyfra2,HIGH); 
+}
+ else{
+ digitalWrite(cyfra2,HIGH); }
+ 
+  
+   
+  if(i>99){
+  digitalWrite(cyfra3,LOW);   
+  PORTC = tab[setek];
+  delay(2);  
+  digitalWrite(cyfra3,HIGH);   
+  }
+  else   digitalWrite(cyfra3,HIGH); 
+    if(i>999){  
+  digitalWrite(cyfra4,LOW);   
+  PORTC = tab[tys];
+  delay(2);  
+  digitalWrite(cyfra4,HIGH);   
+    }
+    else digitalWrite(cyfra4,HIGH); 
+
+
+}
+
