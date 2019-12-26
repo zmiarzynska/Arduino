@@ -1,3 +1,5 @@
+//counter to 9999 (by clicking button, you add 1)
+
 #define SEG_A 0
 #define SEG_B 1
 #define SEG_C 2
